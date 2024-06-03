@@ -46,7 +46,7 @@ fun HourlyForecastCard(
                 tint = Color.Unspecified
             )
             Text(
-                text = "Hourly Forecast",
+                text = "Почасовой прогноз",
                 style = MaterialTheme.typography.titleMedium
             )
         }

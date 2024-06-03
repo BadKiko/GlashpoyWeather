@@ -44,7 +44,7 @@ fun PrecipitationProbabilitiesCard(
                 tint = Color.Unspecified
             )
             Text(
-                text = "Chance of Rain",
+                text = "Процент осадков",
                 style = MaterialTheme.typography.titleMedium
             )
         }

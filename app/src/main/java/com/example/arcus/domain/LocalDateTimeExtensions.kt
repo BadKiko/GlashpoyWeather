@@ -18,7 +18,7 @@ val LocalDateTime.hourStringInTwelveHourFormat: String
         //h - Hour in am/pm (1-12)
         //m - Minute in hour
         //a - Am/pm marker
-        val dateTimeFormatter = DateTimeFormatter.ofPattern("hh a")
+        val dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
         // Add empty characters to the start of the string if the hour is a single digit number
         // to ensure that the length of the hour text remains constant, regardless of whether
         // the hour text is a single digit or not.

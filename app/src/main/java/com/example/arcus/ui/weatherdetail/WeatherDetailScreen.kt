@@ -70,7 +70,7 @@ fun WeatherDetailScreen(
                 textAlign = TextAlign.Center,
                 text = uiState.errorMessage
             )
-            Button(onClick = onBackButtonClick, content = { Text("Go back") })
+            Button(onClick = onBackButtonClick, content = { Text("Назад") })
         }
     } else {
         WeatherDetailScreen(
@@ -80,9 +80,7 @@ fun WeatherDetailScreen(
             weatherConditionIconId = uiState.weatherDetailsOfChosenLocation.iconResId,
             weatherInDegrees = uiState.weatherDetailsOfChosenLocation.temperatureRoundedToInt,
             weatherCondition = uiState.weatherDetailsOfChosenLocation.weatherCondition,
-            aiGeneratedWeatherSummaryText = uiState.weatherSummaryText,
             isPreviouslySavedLocation = uiState.isPreviouslySavedLocation,
-            isWeatherSummaryLoading = uiState.isWeatherSummaryTextLoading,
             singleWeatherDetails = uiState.additionalWeatherInfoItems,
             hourlyForecasts = uiState.hourlyForecasts,
             precipitationProbabilities = uiState.precipitationProbabilities,
@@ -96,11 +94,9 @@ fun WeatherDetailScreen(
 fun WeatherDetailScreen(
     nameOfLocation: String,
     weatherCondition: String,
-    aiGeneratedWeatherSummaryText: String?,
     @DrawableRes weatherConditionImage: Int,
     @DrawableRes weatherConditionIconId: Int,
     weatherInDegrees: Int,
-    isWeatherSummaryLoading: Boolean,
     isPreviouslySavedLocation: Boolean,
     onBackButtonClick: () -> Unit,
     onSaveButtonClick: () -> Unit,
@@ -132,15 +128,6 @@ fun WeatherDetailScreen(
                     currentWeatherInDegrees = weatherInDegrees,
                     weatherCondition = weatherCondition
                 )
-            }
-
-            if (aiGeneratedWeatherSummaryText != null || isWeatherSummaryLoading) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    WeatherSummaryTextCard(
-                        summaryText = aiGeneratedWeatherSummaryText ?: "",
-                        isWeatherSummaryLoading = isWeatherSummaryLoading
-                    )
-                }
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
@@ -199,132 +186,77 @@ private fun Header(
                 .background(Color.Black.copy(alpha = 0.3f)),
         )
 
-        IconButton(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .statusBarsPadding(),
-            colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = iconButtonContainerColor
-            ),
-            onClick = onBackButtonClick
-        ) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = null
-            )
-        }
-        if (shouldDisplaySaveButton) {
-            IconButton(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .statusBarsPadding(),
-                colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = iconButtonContainerColor
-                ),
-                onClick = onSaveButtonClick
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = null
-                )
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
+        Column {
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                text = nameOfLocation,
-                style = MaterialTheme.typography.displayMedium,
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = "$currentWeatherInDegrees°",
-                style = MaterialTheme.typography.displayLarge.copy(fontSize = 80.sp)
-            )
-            Row(
-                modifier = Modifier.offset(x = (-8).dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Explicitly set tint to Color.Unspecified to ensure that no tint is applied to the vector
-                // resource. See documentation of the Icon composable for more information.
-                Icon(
-                    modifier = Modifier.size(32.dp),
-                    imageVector = ImageVector.vectorResource(id = weatherConditionIconId),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
-                Text(text = weatherCondition)
-            }
-        }
-    }
-}
-
-@Composable
-private fun WeatherSummaryTextCard(
-    modifier: Modifier = Modifier,
-    isWeatherSummaryLoading: Boolean,
-    summaryText: String,
-) {
-    Card(modifier = modifier) {
-        val context = LocalContext.current
-        val imageLoader = remember {
-            ImageLoader.Builder(context = context)
-                .components {
-                    if (SDK_INT >= 28) {
-                        add(ImageDecoderDecoder.Factory())
-                    } else {
-                        add(GifDecoder.Factory())
+                IconButton(
+                    modifier = Modifier
+                        .statusBarsPadding(),
+                    colors = IconButtonDefaults.filledIconButtonColors(
+                        containerColor = iconButtonContainerColor
+                    ),
+                    onClick = onBackButtonClick
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = null
+                    )
+                }
+                if (shouldDisplaySaveButton) {
+                    IconButton(
+                        modifier = Modifier
+                            .statusBarsPadding(),
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            containerColor = iconButtonContainerColor
+                        ),
+                        onClick = onSaveButtonClick
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = null
+                        )
                     }
                 }
-                .build()
-        }
-        val imageRequest = remember {
-            ImageRequest.Builder(context = context)
-                .data(R.drawable.bard_sparkle_thinking_anim)
-                .size(Size.ORIGINAL)
-                .build()
-        }
-        val asyncImagePainter = rememberAsyncImagePainter(
-            model = imageRequest,
-            imageLoader = imageLoader
-        )
-
-        Row(
-            modifier = Modifier.padding(top = 8.dp, start = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            if (isWeatherSummaryLoading) {
-                Image(
-                    modifier = Modifier.size(16.dp),
-                    painter = asyncImagePainter,
-                    contentDescription = null
-                )
-            } else {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_bard_logo),
-                    tint = Color.Unspecified,
-                    contentDescription = null
-                )
             }
-            Text(
-                text = "Summary",
-                style = MaterialTheme.typography.titleMedium
-            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    text = nameOfLocation,
+                    style = MaterialTheme.typography.displayMedium,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = "$currentWeatherInDegrees°",
+                    style = MaterialTheme.typography.displayLarge.copy(fontSize = 80.sp)
+                )
+                Row(
+                    modifier = Modifier.offset(x = (-8).dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Explicitly set tint to Color.Unspecified to ensure that no tint is applied to the vector
+                    // resource. See documentation of the Icon composable for more information.
+                    Icon(
+                        modifier = Modifier.size(32.dp),
+                        imageVector = ImageVector.vectorResource(id = weatherConditionIconId),
+                        contentDescription = null,
+                        tint = Color.Unspecified
+                    )
+                    Text(text = weatherCondition)
+                }
+            }
         }
-        TypingAnimatedText(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            text = summaryText
-        )
     }
 }

@@ -62,43 +62,43 @@ private fun AdditionalDailyForecastVariablesResponse.AdditionalForecastedVariabl
     // 'º' character is used instead of the other degree superscript used in other parts of the app.
     return listOf(
         SingleWeatherDetail(
-            name = "Min Temp",
+            name = "Мин температура",
             value = "${minTemperatureForTheDay.first().roundToInt()}º",
             iconResId = R.drawable.ic_thermometer
         ),
         SingleWeatherDetail(
-            name = "Max Temp",
+            name = "Макс температура",
             value = "${maxTemperatureForTheDay.first().roundToInt()}º",
             iconResId = R.drawable.ic_thermometer
         ),
         SingleWeatherDetail(
-            name = "Sunrise",
+            name = "Восход",
             value = sunriseTimeString,
             iconResId = R.drawable.ic_sunrise
         ),
         SingleWeatherDetail(
-            name = "Sunset",
+            name = "Закат",
             value = sunsetTimeString,
             iconResId = R.drawable.ic_sunset
         ),
         SingleWeatherDetail(
-            name = "Feels Like",
+            name = "Ощущается как",
             value = "${apparentTemperature}º",
             iconResId = R.drawable.ic_thermometer //
         ),
         SingleWeatherDetail(
-            name = "Max UV Index",
+            name = "UV индекс",
             value = maxUvIndex.first().toString(),
             iconResId = R.drawable.ic_uv_index
         ),
         SingleWeatherDetail(
-            name = "Wind Direction",
+            name = "Направление ветра",
             value = "${dominantWindDirection.first()}º",
             iconResId = R.drawable.ic_wind_direction
         ),
         SingleWeatherDetail(
-            name = "Wind Speed",
-            value = "${windSpeed.first()} Km/h",
+            name = "Скоорость ветра",
+            value = "${windSpeed.first()} км/ч",
             iconResId = R.drawable.ic_wind
         )
     )

@@ -162,7 +162,7 @@ fun HomeScreen(
 
             if (shouldDisplayCurrentLocationWeatherSubHeader) {
                 subHeaderItem(
-                    title = "Current Location",
+                    title = "Текущая локация",
                     isLoadingAnimationVisible = isCurrentWeatherDetailsLoading
                 )
             }
@@ -178,13 +178,13 @@ fun HomeScreen(
             if (errorFetchingWeatherForCurrentLocation) {
                 errorCardItem(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    errorMessage = "An error occurred when fetching the weather for the current location.",
+                    errorMessage = "Произошла ошибка при получении информации о геопозиции.",
                     onRetryButtonClick = onRetryFetchingWeatherForCurrentLocation
                 )
             }
 
             subHeaderItem(
-                title = "Saved Locations",
+                title = "Сохраненные локация",
                 isLoadingAnimationVisible = isWeatherForSavedLocationsLoading
             )
 
@@ -275,7 +275,7 @@ private fun Header(
                     )
                 }
             },
-            placeholder = { Text(text = "Search for a location") },
+            placeholder = { Text(text = "Поиск локации") },
             content = searchBarSuggestionsContent
         )
     }
