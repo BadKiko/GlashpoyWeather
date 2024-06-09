@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.arcus"
+    namespace = "com.glashpoy.weather"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.arcus"
+        applicationId = "com.glashpoy.weather"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
